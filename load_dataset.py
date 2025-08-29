@@ -5,6 +5,10 @@ import pandas as pd
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+import joblib
+
 dataset = load_dataset("imdb")
 
 # print(dataset)
@@ -33,3 +37,16 @@ y_test = test_df["label"]
 
 # print("Train shape: ", X_train.shape)
 # print("Test Shape: ", X_test.shape)
+
+model = LogisticRegression(max_iter=200)
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+acc = accuracy_score(y_test, y_pred)
+# print("Accuracy: ", acc)
+# print("Classification Report: ", classification_report(y_test, y_pred))
+# print("Confusion matrix: ", confusion_matrix(y_test, y_pred))
+
+joblib.dump(model, "sentiment_model.pkl")
+joblib.dump(vectorizer, "tfidf_vectorizer.pkl")
+# print("Model and vectorizer saved successfully")
